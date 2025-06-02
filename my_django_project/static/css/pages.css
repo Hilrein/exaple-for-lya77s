@@ -1,6 +1,3 @@
-/* Стили для страниц сайта KI Group */
-
-/* Общие стили для анимаций */
 .fade-in {
   animation: fadeInUp 0.6s ease forwards;
   opacity: 0;

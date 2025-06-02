@@ -1,13 +1,3 @@
-// Cart functionality for KLI Group website
-
-// This file contains additional cart-specific functionality
-// Most basic cart operations are already included in main.js
-
-/**
- * Update cart item quantity
- * @param {number} productId - The ID of the product to update
- * @param {number} quantity - The new quantity
- */
 function updateCartItemQuantity(productId, quantity) {
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     
@@ -23,12 +13,10 @@ function updateCartItemQuantity(productId, quantity) {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'ok') {
-            // Update cart UI
             document.querySelector('.cart-count').textContent = data.cart_total;
             document.querySelector(`#item-${productId}-total`).textContent = data.item_total + ' ₸';
             document.querySelector('#cart-total').textContent = data.cart_total_price + ' ₸';
             
-            // Show notification
             showNotification('Корзина обновлена!', 'success');
         }
     })
@@ -55,7 +43,6 @@ function clearCart() {
         .then(response => response.json())
         .then(data => {
             if (data.status === 'ok') {
-                // Reload the page to show empty cart
                 window.location.reload();
             }
         })
@@ -66,9 +53,7 @@ function clearCart() {
     }
 }
 
-// Initialize quantity controls when the DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Quantity increment/decrement controls
     const quantityControls = document.querySelectorAll('.quantity-control');
     
     quantityControls.forEach(control => {
@@ -88,7 +73,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Manual quantity input
     const quantityInputs = document.querySelectorAll('.quantity-input');
     
     quantityInputs.forEach(input => {
@@ -96,7 +80,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const productId = this.dataset.productId;
             let quantity = parseInt(this.value);
             
-            // Ensure quantity is between 1 and 99
             quantity = Math.max(1, Math.min(99, quantity));
             this.value = quantity;
             
@@ -104,7 +87,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Clear cart button
     const clearCartBtn = document.querySelector('#clear-cart-btn');
     
     if (clearCartBtn) {

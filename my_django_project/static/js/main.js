@@ -1,14 +1,9 @@
-// Main JavaScript file for KLI Group website
-
 document.addEventListener('DOMContentLoaded', () => {
     initializeDropdowns();
     initializeAddToCart();
     initializeOrderFormValidation();
 });
 
-/**
- * Initialize dropdown menus
- */
 function initializeDropdowns() {
     const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
 
@@ -17,20 +12,17 @@ function initializeDropdowns() {
             e.preventDefault();
             const parent = toggle.closest('.dropdown');
 
-            // Close other dropdowns
             document.querySelectorAll('.dropdown-menu').forEach(menu => {
                 if (!parent.contains(menu)) {
                     menu.classList.remove('show');
                 }
             });
 
-            // Toggle current dropdown
             const dropdownMenu = parent.querySelector('.dropdown-menu');
             dropdownMenu?.classList.toggle('show');
         });
     });
 
-    // Close dropdowns when clicking outside
     document.addEventListener('click', e => {
         if (!e.target.closest('.dropdown')) {
             document.querySelectorAll('.dropdown-menu').forEach(menu => {
@@ -40,9 +32,6 @@ function initializeDropdowns() {
     });
 }
 
-/**
- * Initialize add to cart functionality with AJAX
- */
 function initializeAddToCart() {
     const forms = document.querySelectorAll('.add-to-cart-form');
 
@@ -80,9 +69,6 @@ function initializeAddToCart() {
     });
 }
 
-/**
- * Initialize validation for order form
- */
 function initializeOrderFormValidation() {
     const form = document.querySelector('#orderModal form');
     if (!form) return;
@@ -114,11 +100,6 @@ function initializeOrderFormValidation() {
     });
 }
 
-/**
- * Show notification message
- * @param {string} message - Text to display
- * @param {string} type - Type: success, error, info
- */
 function showNotification(message, type = 'info') {
     let container = document.getElementById('notification-container');
 
