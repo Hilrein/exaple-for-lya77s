@@ -1,5 +1,5 @@
 {% load static %}
-<!DOCTYPE html %}
+<!DOCTYPE html>
 <html lang="ru">
 
 <head>
@@ -11,7 +11,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
-    <!-- <link rel="stylesheet" href="{% static 'css/responsive.css' %}"> -->
 
     <style>
         .navbar {
@@ -23,7 +22,6 @@
             transition: all 0.2s;
             font-weight: 500;
             color: #212529 !important;
-            /* color: #fff !important; */
         }
 
         .dropdown-menu-animate {
@@ -70,12 +68,7 @@
             align-items: center;
             justify-content: center;
         }
-        .input-group {
-            height: 24px;
-        }
     </style>
-
-
 
     {% block extra_css %}{% endblock %}
 </head>
@@ -87,7 +80,6 @@
             <!-- Brand logo -->
             <a href="{% url 'index' %}" class="logo">
                 <img src="{% static 'img/logo.jpg' %}" alt="Ki">
-                <span class="fw-bold"></span>
             </a>
             
             <!-- Добавляем кнопку для мобильного меню -->
@@ -161,7 +153,6 @@
             </div>
         </div>
     </nav>
-    </header>
 
     <!-- Main content -->
     <main class="site-content py-4">
