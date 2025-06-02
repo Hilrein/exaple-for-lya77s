@@ -4,68 +4,6 @@
 {% block title %}Корзина - KI Group{% endblock %}
 
 {% block content %}
-<style>
-  /* Анимация появления */
-  .fade-in {
-    animation: fadeInUp 0.6s ease forwards;
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  @keyframes fadeInUp {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Карточки товаров с плавным тенью и увеличением при наведении */
-  .cart-item {
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
-    border-radius: 1rem;
-  }
-  .cart-item:hover {
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    transform: translateY(-5px);
-  }
-
-  /* Кнопки с анимацией при наведении */
-  .btn-success {
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  }
-  .btn-success:hover {
-    background-color: #28a745cc;
-    box-shadow: 0 0 12px #28a745cc;
-  }
-  .btn-outline-secondary {
-    transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
-  }
-  .btn-outline-secondary:hover {
-    background-color: #6c757d10;
-    color: #6c757d;
-    border-color: #6c757d;
-  }
-
-  /* Заголовок с легкой тенью */
-  h2.fw-bold {
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
-  }
-
-  /* Итоговая карточка с легким градиентом */
-  .order-summary {
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-  }
-
-  /* Стилизуем пустую корзину */
-  .empty-cart {
-    background: #fefefe;
-    border: 2px dashed #ced4da;
-    transition: background-color 0.3s ease;
-  }
-  .empty-cart:hover {
-    background-color: #f1f3f5;
-  }
-</style>
-
 <div class="row mb-4 fade-in">
     <div class="col-12">
         <h2 class="fw-bold text-dark">🛒 Ваша корзина</h2>
@@ -164,7 +102,6 @@
 </div>
 
 <script>
-  // Bootstrap client-side validation
   (function () {
     'use strict'
     const forms = document.querySelectorAll('.needs-validation')

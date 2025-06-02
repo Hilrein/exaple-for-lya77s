@@ -1,0 +1,225 @@
+/* Основные стили KI Group - премиальный минималистичный дизайн */
+
+:root {
+  --primary-color: #0a0a0a;
+  --secondary-color: #f7f7f7;
+  --accent-color: #e01f29;
+  --text-color: #333;
+  --text-light: #fff;
+  --transition-slow: 1s cubic-bezier(0.19, 1, 0.22, 1);
+  --transition-medium: 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+  --transition-fast: 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  --spacing: clamp(1.5rem, 8vw, 8rem);
+}
+
+/* Global стили */
+body {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  color: var(--text-color);
+  line-height: 1.6;
+  overflow-x: hidden;
+  letter-spacing: -0.01em;
+  background-color: #fff;
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: 300;
+  margin-bottom: 2rem;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+a:hover {
+  color: var(--accent-color);
+}
+
+/* Анимация при появлении */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card, .feature-item {
+  animation: fadeInUp 0.8s ease forwards;
+  opacity: 0;
+}
+
+/* Задержки для плавности */
+.card:nth-child(1), .feature-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.card:nth-child(2), .feature-item:nth-child(2) {
+  animation-delay: 0.3s;
+}
+.card:nth-child(3), .feature-item:nth-child(3) {
+  animation-delay: 0.5s;
+}
+
+/* Hover эффект для карточек */
+.card:hover, .feature-item:hover {
+  transform: scale(1.03);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+
+/* Плавные переходы */
+.card, .feature-item {
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+/* Секция Контент */
+.section {
+  padding: var(--spacing) 0;
+  position: relative;
+}
+
+.container {
+  width: 100%;
+  padding: 0 clamp(1.5rem, 5vw, 4rem);
+  margin: 0 auto;
+  max-width: 1400px;
+}
+
+/* Заголовки секций */
+.section-title {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  margin-bottom: 3rem;
+  color: var(--primary-color);
+  font-weight: 200;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -1rem;
+  left: 0;
+  width: 50px;
+  height: 1px;
+  background-color: var(--accent-color);
+}
+
+/* Премиальные кнопки */
+.premium-btn {
+  display: inline-block;
+  background-color: transparent;
+  color: var(--primary-color);
+  padding: 1rem 3rem;
+  font-size: 1rem;
+  font-weight: 400;
+  text-decoration: none;
+  border-radius: 0;
+  transition: all var(--transition-fast);
+  border: 1px solid var(--primary-color);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  position: relative;
+  overflow: hidden;
+}
+
+.premium-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background-color: var(--primary-color);
+  transition: transform var(--transition-medium);
+  z-index: -1;
+}
+
+.premium-btn:hover {
+  color: white;
+}
+
+.premium-btn:hover::before {
+  transform: translateX(100%);
+}
+
+/* Премиальные карточки */
+.premium-card {
+  background: white;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-medium);
+  border: none;
+  border-radius: 0;
+}
+
+.premium-card-img {
+  width: 100%;
+  padding-bottom: 75%; 
+  position: relative;
+  overflow: hidden;
+}
+
+.premium-card-img img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-medium);
+}
+
+.premium-card:hover .premium-card-img img {
+  transform: scale(1.05);
+}
+
+.premium-card-body {
+  padding: 2rem;
+}
+
+.premium-card-title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+
+.premium-card-text {
+  color: #666;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.premium-card-price {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--accent-color);
+  margin-bottom: 1.5rem;
+  display: block;
+  letter-spacing: -0.01em;
+}
+
+/* Анимация при скролле */
+.reveal {
+  position: relative;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}

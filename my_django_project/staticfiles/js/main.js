@@ -1,15 +1,8 @@
 // Main JavaScript file for KLI Group website
 
-// Wait for the DOM to be fully loaded
-document.addEventListener('DOMContentLoaded', function() {
-    
-    // Initialize dropdown functionality
+document.addEventListener('DOMContentLoaded', () => {
     initializeDropdowns();
-    
-    // Initialize add to cart functionality
     initializeAddToCart();
-    
-    // Initialize validation for order form
     initializeOrderFormValidation();
 });
 
@@ -18,27 +11,27 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 function initializeDropdowns() {
     const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
-    
+
     dropdownToggles.forEach(toggle => {
-        toggle.addEventListener('click', function(e) {
+        toggle.addEventListener('click', e => {
             e.preventDefault();
-            const parent = this.parentElement;
-            
-            // Close all other dropdowns
-            document.querySelectorAll('.dropdown').forEach(dropdown => {
-                if (dropdown !== parent) {
-                    dropdown.querySelector('.dropdown-menu').classList.remove('show');
+            const parent = toggle.closest('.dropdown');
+
+            // Close other dropdowns
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                if (!parent.contains(menu)) {
+                    menu.classList.remove('show');
                 }
             });
-            
+
             // Toggle current dropdown
             const dropdownMenu = parent.querySelector('.dropdown-menu');
-            dropdownMenu.classList.toggle('show');
+            dropdownMenu?.classList.toggle('show');
         });
     });
-    
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(e) {
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', e => {
         if (!e.target.closest('.dropdown')) {
             document.querySelectorAll('.dropdown-menu').forEach(menu => {
                 menu.classList.remove('show');
@@ -51,20 +44,20 @@ function initializeDropdowns() {
  * Initialize add to cart functionality with AJAX
  */
 function initializeAddToCart() {
-    const addToCartForms = document.querySelectorAll('.add-to-cart-form');
-    
-    addToCartForms.forEach(form => {
-        form.addEventListener('submit', function(e) {
+    const forms = document.querySelectorAll('.add-to-cart-form');
+
+    forms.forEach(form => {
+        form.addEventListener('submit', e => {
             e.preventDefault();
-            
-            const url = this.action;
-            const csrf_token = this.querySelector('[name=csrfmiddlewaretoken]').value;
-            
-            // Send AJAX request
+            const url = form.action;
+            const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]')?.value;
+
+            if (!csrfToken) return;
+
             fetch(url, {
                 method: 'POST',
                 headers: {
-                    'X-CSRFToken': csrf_token,
+                    'X-CSRFToken': csrfToken,
                     'X-Requested-With': 'XMLHttpRequest',
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
@@ -73,15 +66,14 @@ function initializeAddToCart() {
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'ok') {
-                    // Update cart count in UI
-                    document.querySelector('.cart-count').textContent = data.cart_total;
-                    
-                    // Show success message
+                    const cartCount = document.querySelector('.cart-count');
+                    if (cartCount) cartCount.textContent = data.cart_total;
                     showNotification('Товар добавлен в корзину!', 'success');
+                } else {
+                    showNotification('Произошла ошибка. Попробуйте снова.', 'error');
                 }
             })
-            .catch(error => {
-                console.error('Error:', error);
+            .catch(() => {
                 showNotification('Ошибка при добавлении товара в корзину.', 'error');
             });
         });
@@ -92,94 +84,69 @@ function initializeAddToCart() {
  * Initialize validation for order form
  */
 function initializeOrderFormValidation() {
-    const orderForm = document.querySelector('#orderModal form');
-    
-    if (orderForm) {
-        orderForm.addEventListener('submit', function(e) {
-            const fullNameInput = this.querySelector('[name=full_name]');
-            const phoneInput = this.querySelector('[name=phone]');
-            let isValid = true;
-            
-            // Validate full name
-            if (!fullNameInput.value.trim()) {
-                fullNameInput.classList.add('is-invalid');
-                isValid = false;
-            } else {
-                fullNameInput.classList.remove('is-invalid');
-            }
-            
-            // Validate phone
-            const phoneRegex = /^\+?[0-9]{10,15}$/;
-            if (!phoneInput.value.trim() || !phoneRegex.test(phoneInput.value.trim())) {
-                phoneInput.classList.add('is-invalid');
-                isValid = false;
-            } else {
-                phoneInput.classList.remove('is-invalid');
-            }
-            
-            if (!isValid) {
-                e.preventDefault();
-                showNotification('Пожалуйста, заполните все поля правильно.', 'error');
-            }
-        });
-    }
+    const form = document.querySelector('#orderModal form');
+    if (!form) return;
+
+    form.addEventListener('submit', e => {
+        const fullName = form.querySelector('[name=full_name]');
+        const phone = form.querySelector('[name=phone]');
+        const phoneRegex = /^\+?[0-9]{10,15}$/;
+        let isValid = true;
+
+        if (!fullName.value.trim()) {
+            fullName.classList.add('is-invalid');
+            isValid = false;
+        } else {
+            fullName.classList.remove('is-invalid');
+        }
+
+        if (!phoneRegex.test(phone.value.trim())) {
+            phone.classList.add('is-invalid');
+            isValid = false;
+        } else {
+            phone.classList.remove('is-invalid');
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+            showNotification('Пожалуйста, заполните все поля правильно.', 'error');
+        }
+    });
 }
 
 /**
  * Show notification message
- * @param {string} message - The message to display
- * @param {string} type - The type of notification (success, error, info)
+ * @param {string} message - Text to display
+ * @param {string} type - Type: success, error, info
  */
 function showNotification(message, type = 'info') {
-    // Check if notification container exists, if not create it
-    let notificationContainer = document.getElementById('notification-container');
-    if (!notificationContainer) {
-        notificationContainer = document.createElement('div');
-        notificationContainer.id = 'notification-container';
-        notificationContainer.style.position = 'fixed';
-        notificationContainer.style.top = '20px';
-        notificationContainer.style.right = '20px';
-        notificationContainer.style.zIndex = '9999';
-        document.body.appendChild(notificationContainer);
+    let container = document.getElementById('notification-container');
+
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'notification-container';
+        Object.assign(container.style, {
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            zIndex: '9999'
+        });
+        document.body.appendChild(container);
     }
-    
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = 'alert';
-    notification.style.marginBottom = '10px';
-    notification.style.minWidth = '250px';
-    notification.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
-    
-    // Set type-specific styles
-    if (type === 'success') {
-        notification.className += ' alert-success';
-    } else if (type === 'error') {
-        notification.className += ' alert-danger';
-    } else {
-        notification.className += ' alert-info';
-    }
-    
-    // Set message
-    notification.textContent = message;
-    
-    // Add close button
-    const closeButton = document.createElement('button');
-    closeButton.type = 'button';
-    closeButton.className = 'close';
-    closeButton.innerHTML = '&times;';
-    closeButton.style.marginLeft = '10px';
-    closeButton.addEventListener('click', function() {
-        notificationContainer.removeChild(notification);
-    });
-    notification.appendChild(closeButton);
-    
-    // Add to container
-    notificationContainer.appendChild(notification);
-    
-    // Auto-remove after 5 seconds
-    setTimeout(function() {
-        if (notification.parentNode === notificationContainer) {
-            notificationContainer.removeChild(notification);
-        }
-    }, 5000);
+
+    const alert = document.createElement('div');
+    alert.className = `alert alert-${type}`;
+    alert.style.cssText = 'margin-bottom:10px; min-width:250px; box-shadow:0 4px 8px rgba(0,0,0,0.1);';
+    alert.textContent = message;
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'close';
+    closeBtn.innerHTML = '&times;';
+    closeBtn.style.marginLeft = '10px';
+    closeBtn.onclick = () => alert.remove();
+
+    alert.appendChild(closeBtn);
+    container.appendChild(alert);
+
+    setTimeout(() => alert.remove(), 5000);
 }

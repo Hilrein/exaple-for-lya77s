@@ -1143,25 +1143,3 @@ a.deletelink:focus, a.deletelink:hover {
 .base-svgs {
     display: none;
 }
-
-.filters__title, .filters__subtitle {
-    font-weight: 600;
-}
-
-.filters__item.active > a {
-    font-weight: bold;
-    color: #0d6efd;
-}
-
-.product-card__title {
-    font-size: 1rem;
-    font-weight: 600;
-}
-
-.product-card__price {
-    font-size: 1.1rem;
-}
-
-.products-header__title {
-    font-weight: 700;
-}
