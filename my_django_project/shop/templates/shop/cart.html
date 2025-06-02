@@ -1,0 +1,193 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}Корзина - KI Group{% endblock %}
+
+{% block content %}
+<style>
+  /* Анимация появления */
+  .fade-in {
+    animation: fadeInUp 0.6s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Карточки товаров с плавным тенью и увеличением при наведении */
+  .cart-item {
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    border-radius: 1rem;
+  }
+  .cart-item:hover {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    transform: translateY(-5px);
+  }
+
+  /* Кнопки с анимацией при наведении */
+  .btn-success {
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .btn-success:hover {
+    background-color: #28a745cc;
+    box-shadow: 0 0 12px #28a745cc;
+  }
+  .btn-outline-secondary {
+    transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+  }
+  .btn-outline-secondary:hover {
+    background-color: #6c757d10;
+    color: #6c757d;
+    border-color: #6c757d;
+  }
+
+  /* Заголовок с легкой тенью */
+  h2.fw-bold {
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+  }
+
+  /* Итоговая карточка с легким градиентом */
+  .order-summary {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  }
+
+  /* Стилизуем пустую корзину */
+  .empty-cart {
+    background: #fefefe;
+    border: 2px dashed #ced4da;
+    transition: background-color 0.3s ease;
+  }
+  .empty-cart:hover {
+    background-color: #f1f3f5;
+  }
+</style>
+
+<div class="row mb-4 fade-in">
+    <div class="col-12">
+        <h2 class="fw-bold text-dark">🛒 Ваша корзина</h2>
+    </div>
+</div>
+
+{% if cart|length > 0 %}
+<div class="row gy-4 fade-in">
+    <!-- Список товаров -->
+    <div class="col-lg-8">
+        <div class="card border-0 shadow rounded-4">
+            <div class="card-body p-4">
+                {% for item in cart %}
+                <div class="d-flex align-items-center justify-content-between border-bottom pb-3 mb-3 cart-item shadow-sm">
+                    <div class="d-flex align-items-center">
+                        {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" width="70" class="rounded shadow-sm me-3">
+                        {% else %}
+                        <img src="{% static 'img/no-image.png' %}" alt="Нет изображения" width="70" class="rounded shadow-sm me-3">
+                        {% endif %}
+                        <div>
+                            <a href="{{ item.product.get_absolute_url }}" class="fw-semibold text-dark fs-6 text-decoration-none">{{ item.product.name }}</a><br>
+                            <small class="text-muted">Цена: {{ item.price }} ₸</small>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <p class="mb-1">Кол-во: <strong>{{ item.quantity }}</strong></p>
+                        <p class="mb-1">Сумма: <strong>{{ item.total_price }} ₸</strong></p>
+                        <a href="{% url 'cart_remove' item.product.id %}" class="btn btn-sm btn-outline-danger rounded-pill" title="Удалить товар из корзины">
+                            <i class="fa fa-trash"></i> Удалить
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Итог -->
+    <div class="col-lg-4">
+        <div class="card border-0 shadow rounded-4 order-summary">
+            <div class="card-body p-4">
+                <h5 class="fw-bold mb-3">🧾 Итог</h5>
+                <ul class="list-unstyled mb-4 fs-6">
+                    <li class="d-flex justify-content-between mb-2">
+                        <span>Товаров:</span>
+                        <strong>{{ cart|length }}</strong>
+                    </li>
+                    <li class="d-flex justify-content-between mb-2">
+                        <span>Общая сумма:</span>
+                        <strong>{{ cart.get_total_price }} ₸</strong>
+                    </li>
+                </ul>
+                <div class="d-grid gap-2">
+                    <button type="button" class="btn btn-success rounded-pill" data-bs-toggle="modal" data-bs-target="#orderModal" aria-label="Оформить заказ">
+                        Оформить заявку
+                    </button>
+                    <a href="{% url 'product_list' %}" class="btn btn-outline-secondary rounded-pill" aria-label="Продолжить покупки">
+                        Продолжить покупки
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно заказа -->
+<div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content rounded-4 shadow-lg border-0">
+      <div class="modal-header bg-dark text-white rounded-top">
+        <h5 class="modal-title" id="orderModalLabel">Оформление заявки</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <form action="{% url 'order_create' %}" method="post" class="needs-validation" novalidate>
+        <div class="modal-body">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="{{ form.full_name.id_for_label }}" class="form-label">ФИО</label>
+            {{ form.full_name }}
+            <div class="invalid-feedback">Пожалуйста, введите ваше ФИО.</div>
+          </div>
+          <div class="mb-3">
+            <label for="{{ form.phone.id_for_label }}" class="form-label">Телефон</label>
+            {{ form.phone }}
+            <div class="invalid-feedback">Пожалуйста, введите номер телефона.</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Отмена</button>
+          <button type="submit" class="btn btn-success">Отправить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Bootstrap client-side validation
+  (function () {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+        form.classList.add('was-validated')
+      }, false)
+    })
+  })()
+</script>
+
+{% else %}
+<div class="row fade-in">
+    <div class="col-12">
+        <div class="alert alert-light empty-cart border shadow-sm text-center rounded-4 p-5">
+            <h5 class="mb-3">🛒 Ваша корзина пуста</h5>
+            <a href="{% url 'product_list' %}" class="btn btn-primary rounded-pill px-4 shadow-sm" aria-label="Перейти к покупкам">Перейти к покупкам</a>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

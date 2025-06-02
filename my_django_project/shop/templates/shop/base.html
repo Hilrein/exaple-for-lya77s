@@ -1,0 +1,234 @@
+{% load static %}
+<!DOCTYPE html %}
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}KLI Group - Водопонижение грунтовых вод{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'css/responsive.css' %}"> -->
+
+    <style>
+        .navbar {
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link {
+            position: relative;
+            transition: all 0.2s;
+            font-weight: 500;
+            color: #212529 !important;
+            /* color: #fff !important; */
+        }
+
+        .dropdown-menu-animate {
+            animation: dropdown-animation 0.3s ease;
+            border-radius: 0.5rem;
+            border: none;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+        @keyframes dropdown-animation {
+            0% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-item {
+            padding: 0.6rem 1.2rem;
+            transition: all 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f0f8ff;
+            transform: translateX(5px);
+        }
+
+        .border {
+            border-color: #212529 !important;
+        }
+
+        .logo img {
+            max-height: 40px;
+        }
+
+        .btn-outline-danger {
+            height: 39px;
+            width: 39px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .input-group {
+            height: 24px;
+        }
+    </style>
+
+
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top animated fadeIn">
+        <div class="container">
+            <!-- Brand logo -->
+            <a href="{% url 'index' %}" class="logo">
+                <img src="{% static 'img/logo.jpg' %}" alt="Ki">
+                <span class="fw-bold"></span>
+            </a>
+            
+            <!-- Добавляем кнопку для мобильного меню -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavigation"
+                aria-controls="mainNavigation" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="mainNavigation">
+                <!-- Главная, Товары и Услуги, О нас, Контакты -->
+
+                <!-- ГЛАВНАЯ -->
+                <ul class="navbar-nav me-auto">
+                    <li>
+                        <a class="nav-link px-3 {% if request.path == '/' %}active fw-bold{% endif %}" href="{% url 'index' %}">
+                            <i class="fas fa-home me-1"></i> 
+                            <span>ГЛАВНАЯ</span>
+                        </a>
+                    </li>
+
+                    <!-- ТОВАРЫ И УСЛУГИ -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link px-3 dropdown-toggle {% if '/products/' in request.path %}active fw-bold{% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-box-open me-1"></i> 
+                            <span>ТОВАРЫ И УСЛУГИ</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-animate">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'product_list' %}">
+                                    <i class="fas fa-list-ul me-2 text-danger"></i>
+                                    Все товары и услуги
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            {% for category in categories %}
+                            <li>
+                                <a class="dropdown-item" href="{% url 'product_list_by_category' category.slug %}">
+                                    <i class="fas fa-tag me-2 text-danger"></i>
+                                    {{ category.name }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a class="nav-link px-3 {% if request.path == '/about/' %}active fw-bold{% endif %}" href="{% url 'about' %}">
+                            <i class="fas fa-info-circle me-1"></i>
+                            <span>О НАС</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link px-3 {% if request.path == '/contacts/' %}active fw-bold{% endif %}" href="{% url 'contacts' %}">
+                            <i class="fas fa-address-book me-1"></i> 
+                            <span>КОНТАКТЫ</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Search and cart -->                
+                <form class="me-3" method="get" action="{% url 'product_list' %}">
+                    <div class="input-group">
+                        <input type="text" class="form-control border" name="search" placeholder="Поиск...">
+                        <button class="btn btn-dark" type="submit"><i class="fas fa-search"></i></button>
+                    </div>
+                </form>
+                <a href="{% url 'cart_detail' %}" class="btn btn-outline-danger position-relative">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ cart|length }}</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+    </header>
+
+    <!-- Main content -->
+    <main class="site-content py-4">
+        <div class="container">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer bg-dark text-white py-5 mt-5 shadow-lg">
+        <div class="container">
+            <div class="row g-4">
+
+                <!-- Company info -->
+                    <div class="col-md-4">
+                        <div class="p-3 bg-secondary bg-opacity-10 rounded-4 h-100">
+                            <h5 class="fw-bold mb-3"><i class="fas fa-building me-2"></i>О компании</h5>
+                            <p class="small">KI Group предоставляет услуги по водопонижению, асфальтированию и благоустройству территорий с
+                                гарантией качества и надёжности.</p>
+                        </div>
+                 </div>
+
+                <!-- Working hours -->
+                    <div class="col-md-4">
+                        <div class="p-3 bg-secondary bg-opacity-10 rounded-4 h-100">
+                            <h5 class="fw-bold mb-3"><i class="fas fa-clock me-2"></i>График работы</h5>
+                            <ul class="list-unstyled small mb-0">
+                                <li>Пн – Пт: 09:00 – 18:00<li>
+                                <li>Сб: 09:00 – 16:00</li>
+                                <li>Вс: <span class="text-danger">Выходной</span></li>
+                            </ul>
+                    </div>
+                </div>
+
+                <!-- Contact info -->
+                    <div class="col-md-4">
+                        <div class="p-3 bg-secondary bg-opacity-10 rounded-4 h-100">
+                            <h5 class="fw-bold mb-3">
+                                <i class="fas fa-phone-alt me-2"></i>Контакты</h5>
+                            <p class="small mb-1">
+                                <i class="fas fa-map-marker-alt me-2"></i>
+                                пр. Кабанбай батыра, 19, Астана</p>
+                            <p class="small mb-1">
+                                <i class="fas fa-phone me-2"></i>
+                                <a href="tel:+77075030770" class="text-white text-decoration-none">+7 (707) 503-07-70</a></p>
+                            <p class="small mb-0">
+                                <i class="fas fa-envelope me-2"></i>
+                                <a href="mailto:info@kigroup.kz" class="text-white text-decoration-none">info@kigroup.kz</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-secondary mt-5">
+
+            <!-- Copyright -->
+            <div class="text-center small mt-3">
+                © {% now "Y" %} <strong>KI Group</strong>. Все права защищены.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

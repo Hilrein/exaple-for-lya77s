@@ -1,0 +1,101 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}
+    {% if category %}{{ category.name }}{% else %}Товары и услуги{% endif %} - KI Group
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Sidebar Filters -->
+    <aside class="col-lg-3 mb-4">
+        <div class="card filters shadow-lg rounded-4 border-0 animate__animated animate__fadeInLeft">
+            <div class="card-header bg-dark text-white rounded-top-4">
+                <h5 class="filters__title mb-0">Фильтры</h5>
+            </div>
+            <div class="card-body bg-light rounded-bottom-4">
+                <!-- Category Filter -->
+                <section class="filters__section mb-4">
+                    <h6 class="filters__subtitle text-secondary">Категории</h6>
+                    <ul class="list-unstyled filters__list">
+                        <li class="filters__item {% if not category %}fw-bold text-primary{% endif %}">
+                            <a href="{% url 'product_list' %}" class="text-decoration-none">Все категории</a>
+                        </li>
+                        {% for c in categories %}
+                            <li class="filters__item {% if category.slug == c.slug %}fw-bold text-primary{% endif %}">
+                                <a href="{% url 'product_list_by_category' c.slug %}" class="text-decoration-none">{{ c.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </section>
+
+                <!-- Price Filter -->
+                <section class="filters__section">
+                    <h6 class="filters__subtitle text-secondary">Цена</h6>
+                    <form method="get" action="{% if category %}{% url 'product_list_by_category' category.slug %}{% else %}{% url 'product_list' %}{% endif %}">
+                        <div class="form-group mb-2">
+                            <label for="min_price" class="form-label">От:</label>
+                            <input type="number" class="form-control rounded-pill" id="min_price" name="min_price" value="{{ form.min_price.value|default:'' }}">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="max_price" class="form-label">До:</label>
+                            <input type="number" class="form-control rounded-pill" id="max_price" name="max_price" value="{{ form.max_price.value|default:'' }}">
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-dark btn-sm rounded-pill">Применить</button>
+                            <a href="{% if category %}{% url 'product_list_by_category' category.slug %}{% else %}{% url 'product_list' %}{% endif %}" class="btn btn-outline-dark btn-sm rounded-pill">Сбросить</a>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Products Grid -->
+    <main class="col-lg-9">
+        <header class="products-header mb-4">
+            <h1 class="products-header__title h4 text-dark border-bottom pb-2 animate__animated animate__fadeInDown">
+                {% if category %}
+                    {{ category.name }}
+                {% else %}
+                    Все товары и услуги
+                {% endif %}
+            </h1>
+        </header>
+
+        <div class="row">
+            {% for product in products %}
+                <div class="col-md-4 mb-4">
+                    <div class="card product-card h-100 shadow-lg border-0 rounded-4 animate__animated animate__fadeInUp">
+                        <div class="product-card__image bg-light rounded-top-4 overflow-hidden position-relative">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" class="card-img-top p-2 rounded-top-4 hover-zoom" alt="{{ product.name }}">
+                            {% else %}
+                                <img src="{% static 'img/no-image.png' %}" class="card-img-top p-2 rounded-top-4 hover-zoom" alt="Нет изображения">
+                            {% endif %}
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="product-card__title card-title text-dark">{{ product.name }}</h5>
+                            <p class="product-card__category text-muted small mb-2">{{ product.category.name }}</p>
+                            <p class="product-card__price text-success fw-bold mb-3">{{ product.price }} ₸</p>
+                            <div class="mt-auto d-flex justify-content-between">
+                                <a href="{% url 'product_detail' product.id product.slug %}" class="btn btn-outline-dark btn-sm rounded-pill">Подробнее</a>
+                                <form action="{% url 'cart_add' product.id %}" method="post" class="add-to-cart-form d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-dark btn-sm rounded-pill">В корзину</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info animate__animated animate__fadeIn">
+                        По вашему запросу товары не найдены. Попробуйте изменить параметры фильтрации.
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+</div>
+{% endblock %}

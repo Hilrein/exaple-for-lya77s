@@ -1,0 +1,113 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}{{ product.name }} - KI Group{% endblock %}
+
+{% block content %}
+
+<!-- Хлебные крошки -->
+<nav aria-label="breadcrumb" class="mb-4 animate__animated animate__fadeInDown">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Главная</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'product_list' %}">Товары и услуги</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'product_list_by_category' product.category.slug %}">{{ product.category.name }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+    </ol>
+</nav>
+
+<div class="row animate__animated animate__fadeIn">
+    <!-- Изображение товара -->
+    <div class="col-md-5 mb-4">
+        <div class="shadow rounded overflow-hidden bg-white p-3">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" class="img-fluid rounded product-detail-img" alt="{{ product.name }}">
+            {% else %}
+                <img src="{% static 'img/no-image.png' %}" class="img-fluid rounded product-detail-img" alt="Нет изображения">
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Информация о товаре -->
+    <div class="col-md-7">
+        <div class="product-info">
+            <h1 class="mb-3 fw-bold">{{ product.name }}</h1>
+            <p class="text-muted mb-3">Категория: {{ product.category.name }}</p>
+            <div class="mb-4">
+                <span class="fw-semibold">Цена:</span>
+                <span class="text-dark fs-5 fw-bold">{{ product.price }} ₸</span>
+            </div>
+
+            <!-- Добавить в корзину -->
+            <form action="{% url 'cart_add' product.id %}" method="post" class="mb-4">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-dark px-4">Добавить в корзину</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Описание -->
+<!-- Описание -->
+<div class="row mt-5 animate__animated animate__fadeInUp">
+    <div class="col-12">
+        <div class="bg-light rounded-4 p-4 shadow-sm border border-1 border-gray">
+            <h4 class="mb-3 fw-semibold text-dark border-bottom pb-2">Описание товара</h4>
+            <div class="product-description fs-6 text-secondary lh-lg">
+                {{ product.description|linebreaks }}
+            </div>
+
+            <!-- Контакты под описанием -->
+            <div class="mt-4 border-top pt-3">
+                <h5 class="fw-semibold text-dark">По вопросам приобретения:</h5>
+                <p class="mb-1"><i class="fa fa-phone text-dark me-2"></i><strong>+7 (707) 503-07-70</strong></p>
+                <p><i class="fa fa-envelope text-dark me-2"></i><strong>info@kligroup.kz</strong></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+            
+
+<!-- Похожие товары -->
+<div class="row mt-5">
+    <div class="col-12">
+        <h3 class="mb-4 animate__animated animate__fadeInUp">Похожие товары</h3>
+    </div>
+</div>
+
+<div class="row">
+    {% for p in product.category.products.all|slice:":3" %}
+        {% if p.id != product.id %}
+            <div class="col-md-4 mb-4 animate__animated animate__fadeInUp">
+                <div class="card h-100 shadow-sm border-0 rounded position-relative">
+                    <!-- Стикер -->
+                    {% if p.label %}
+                        <div class="position-absolute top-0 start-0 bg-danger text-white px-2 py-1 rounded-end small m-2 z-1">
+                            {% if p.label == 'new' %}Новинка{% endif %}
+                            {% if p.label == 'hit' %}Хит{% endif %}
+                            {% if p.label == 'sale' %}Акция{% endif %}
+                        </div>
+                    {% endif %}
+                    {% if p.image %}
+                        <img src="{{ p.image.url }}" class="card-img-top rounded-top" alt="{{ p.name }}">
+                    {% else %}
+                        <img src="{% static 'img/no-image.png' %}" class="card-img-top rounded-top" alt="Нет изображения">
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ p.name }}</h5>
+                        <p class="text-dark fw-semibold mb-3">{{ p.price }} ₸</p>
+                        <div class="mt-auto d-flex justify-content-between">
+                            <a href="{% url 'product_detail' p.id p.slug %}" class="btn btn-outline-dark btn-sm">Подробнее</a>
+                            <form action="{% url 'cart_add' p.id %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-dark btn-sm">В корзину</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+{% endblock %}

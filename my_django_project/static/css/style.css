@@ -1,0 +1,40 @@
+/* Анимация при появлении */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card, .feature-item {
+  animation: fadeInUp 0.8s ease forwards;
+  opacity: 0;
+}
+
+/* Задержки для плавности */
+.card:nth-child(1), .feature-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.card:nth-child(2), .feature-item:nth-child(2) {
+  animation-delay: 0.3s;
+}
+.card:nth-child(3), .feature-item:nth-child(3) {
+  animation-delay: 0.5s;
+}
+
+/* Hover эффект для карточек */
+.card:hover, .feature-item:hover {
+  transform: scale(1.03);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+}
+
+/* Плавные переходы */
+.card, .feature-item {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
