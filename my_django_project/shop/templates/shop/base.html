@@ -13,6 +13,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
@@ -38,20 +39,24 @@
             line-height: 1.6;
         }
 
+        h1, h2, h3, h4, h5 {
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+        }
+
         /* Навигация */
         .navbar {
             padding: 1.5rem 2rem;
             transition: all var(--transition-medium);
-            background-color: transparent;
+            background-color: #fff;
             position: fixed;
             width: 100%;
             z-index: 1000;
-        }
-
-        .navbar.scrolled {
-            background-color: #fff;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-            padding: 1rem 2rem;
+            height: 60px;
         }
 
         .navbar-brand {
@@ -72,12 +77,13 @@
         }
 
         .nav-link {
-            font-size: 0.9rem;
+            font-family: var(--font-headings);
+            font-size: 0.95rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             padding: 0.5rem 1.5rem !important;
             color: var(--text-color) !important;
-            font-weight: 400;
+            font-weight: 600;
             position: relative;
             transition: all var(--transition-fast);
         }
@@ -135,7 +141,6 @@
             animation: fadeIn 0.3s ease;
         }
 
-        /* Добавляю невидимый мост между пунктом меню и списком */
         .nav-item.dropdown::after {
             content: '';
             position: absolute;
@@ -216,7 +221,7 @@
         .site-content {
             padding: 0;
             min-height: calc(100vh - 100px);    
-            padding-top: 70px;
+            padding-top: 60px;
         }
 
         /* Футер */
@@ -228,9 +233,10 @@
         }
 
         .footer-heading {
+            font-family: var(--font-headings);
             color: white;
-            font-size: 1rem;
-            font-weight: 500;
+            font-size: 1.1rem;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             margin-bottom: 1.5rem;
@@ -442,14 +448,14 @@
     
     <script>
         // Изменение стиля навигации при прокрутке
-        window.addEventListener('scroll', function() {
-            const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
+        // window.addEventListener('scroll', function() {
+        //     const navbar = document.querySelector('.navbar');
+        //     if (window.scrollY > 50) {
+        //         navbar.classList.add('scrolled');
+        //     } else {
+        //         navbar.classList.remove('scrolled');
+        //     }
+        // });
     </script>
     
     {% block extra_js %}{% endblock %}

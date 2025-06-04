@@ -151,9 +151,9 @@ html {
 
 /* Fix для фиксированного меню на мобильных устройствах */
 @media (max-width: 991.98px) {
-  .navbar.scrolled {
+  /* .navbar.scrolled {
     padding: 0.8rem 1rem;
-  }
+  } */
   
   body {
     padding-top: 0;
@@ -178,10 +178,10 @@ html {
     color: var(--text-color);
   }
   
-  .navbar.scrolled {
+  /* .navbar.scrolled {
     background-color: #121212;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-  }
+  } */
   
   .premium-card, 
   .service-card {

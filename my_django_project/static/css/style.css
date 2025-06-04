@@ -112,7 +112,6 @@ a:hover {
   background-color: var(--accent-color);
 }
 
-/* Премиальные кнопки */
 .premium-btn {
   display: inline-block;
   background-color: transparent;

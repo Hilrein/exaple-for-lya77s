@@ -361,22 +361,29 @@ h2.fw-bold {
 }
 
 .hero-title {
-  font-size: clamp(3rem, 10vw, 7rem);
-  font-weight: 200;
-  margin-bottom: 2rem;
-  line-height: 1;
-  letter-spacing: -0.04em;
+  font-family: var(--font-headings);
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 800;
+  color: white;
+  margin-bottom: 1.5rem;
+  max-width: 900px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 1s var(--transition-slow) forwards;
 }
 
 .hero-subtitle {
-  font-size: clamp(1.2rem, 3vw, 1.8rem);
-  font-weight: 300;
-  margin-bottom: 3rem;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  opacity: 0.9;
-  letter-spacing: -0.01em;
+  font-family: var(--font-body);
+  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 2.5rem;
+  max-width: 700px;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 1s var(--transition-slow) 0.2s forwards;
 }
 
 .hero-btn {
@@ -483,10 +490,11 @@ h2.fw-bold {
 }
 
 .about-title {
+  font-family: var(--font-headings);
   font-size: clamp(2.5rem, 6vw, 5rem);
   margin-bottom: 3rem;
   color: var(--primary-color);
-  font-weight: 200;
+  font-weight: 700;
   line-height: 1.1;
   letter-spacing: -0.03em;
   position: relative;
@@ -897,4 +905,15 @@ h2.fw-bold {
 .reveal.active {
   opacity: 1;
   transform: translateY(0);
+}
+
+.section-title {
+  font-family: var(--font-headings);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  margin-bottom: 3rem;
+  color: var(--primary-color);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  position: relative;
 } 
