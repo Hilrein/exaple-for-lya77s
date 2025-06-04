@@ -361,9 +361,9 @@ h2.fw-bold {
 }
 
 .hero-title {
-  font-family: var(--font-headings);
+  font-family: 'Ubuntu Condensed', sans-serif;
   font-size: clamp(3rem, 7vw, 6rem);
-  font-weight: 800;
+  font-weight: bold;
   color: white;
   margin-bottom: 1.5rem;
   max-width: 900px;
